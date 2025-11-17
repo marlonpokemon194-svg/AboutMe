@@ -10,7 +10,7 @@
         height: 100%;
         margin: 0;
         overflow: hidden;
-        font-family: 'Permanent Marker', cursive; /* Schrift überall Graffiti */
+        font-family: 'Permanent Marker', cursive;
         background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
         color: #fff;
     }
@@ -107,48 +107,127 @@
         transform: scale(1.2);
         text-shadow: 0 0 5px #ff00ff, 0 0 15px #ff00ff, 0 0 25px #ff00ff;
     }
+
+    /* Windows-style Popup */
+    #langPopup {
+        position: fixed;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        background: #c0c0c0;
+        border: 2px solid #000;
+        box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
+        z-index: 9999;
+        display: none;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #langPopup .title-bar {
+        background: linear-gradient(#0a4d9f, #0078d7);
+        color: white;
+        padding: 8px 10px;
+        font-weight: bold;
+        font-size: 1.1em;
+        cursor: default;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+    }
+
+    #langPopup .title-bar .close-btn {
+        background: #ff5c5c;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 18px;
+        border-radius: 3px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    #langPopup .content {
+        padding: 20px;
+        text-align: center;
+        color: #000;
+    }
+
+    #langPopup .content p {
+        margin-bottom: 20px;
+        font-size: 1.2em;
+    }
+
+    #langPopup button {
+        margin: 5px;
+        padding: 8px 15px;
+        font-size: 1em;
+        cursor: pointer;
+        background: #0078d7;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        transition: 0.2s;
+    }
+
+    #langPopup button:hover {
+        background: #005a9e;
+    }
 </style>
 </head>
 <body>
 
+<!-- Windows-style Sprache Popup -->
+<div id="langPopup">
+    <div class="title-bar">
+        Language Selection
+        <div class="close-btn" onclick="langPopup.style.display='none'">×</div>
+    </div>
+    <div class="content">
+        <p>Select your language:</p>
+        <button onclick="setLanguage('en')">English</button>
+        <button onclick="setLanguage('de')">Deutsch</button>
+        <button onclick="setLanguage('fr')">Français</button>
+    </div>
+</div>
+
 <nav>
-    <a href="#about">Über mich</a>
-    <a href="#projects">Projekte</a>
-    <a href="#contact">Links</a>
+    <a href="#about" id="navAbout">Über mich</a>
+    <a href="#projects" id="navProjects">Projekte</a>
+    <a href="#contact" id="navContact">Links</a>
 </nav>
 
 <header>
     <div class="neon-text-container">
-        <span class="active">KartoffelSalat</span>
-        <span>Programmierer</span>
+        <span class="active" id="headerName">KartoffelSalat</span>
+        <span id="headerRole">Programmierer</span>
     </div>
 </header>
 
 <section id="about">
     <div>
-        <h2>Über KartoffelSalat</h2>
-        <p>Hi, ich bin KartoffelSalat. Ich liebe es zu streamen und Software zu programmieren. Auf meinem Kanal teile ich spannende Inhalte zu Gaming, Coding und Tech.</p>
+        <h2 id="titleAbout">Über KartoffelSalat</h2>
+        <p id="textAbout">Hi, ich bin KartoffelSalat. Ich liebe es zu streamen und Software zu programmieren. Auf meinem Kanal teile ich spannende Inhalte zu Gaming, Coding und Tech.</p>
     </div>
 </section>
 
 <section id="projects">
     <div>
-        <h2>Meine Projekte</h2>
+        <h2 id="titleProjects">Meine Projekte</h2>
         <ul>
-            <li><a href="https://github.com/dein-github" target="_blank">GitHub Projekte</a></li>
-            <li><a href="https://www.twitch.tv/dein-stream" target="_blank">Mein Twitch Kanal</a></li>
-            <li><a href="https://www.youtube.com/channel/dein-youtube" target="_blank">YouTube Videos</a></li>
+            <li><a href="https://github.com/dein-github" target="_blank" id="linkGitHub">GitHub Projekte</a></li>
+            <li><a href="https://www.twitch.tv/dein-stream" target="_blank" id="linkTwitch">Mein Twitch Kanal</a></li>
+            <li><a href="https://www.youtube.com/channel/dein-youtube" target="_blank" id="linkYouTube">YouTube Videos</a></li>
         </ul>
     </div>
 </section>
 
 <section id="contact">
     <div>
-        <h2>Kontakt & Links</h2>
+        <h2 id="titleContact">Kontakt & Links</h2>
         <ul>
-            <li><a href="https://twitter.com/dein-twitter" target="_blank">Twitter</a></li>
-            <li><a href="https://www.instagram.com/dein-instagram" target="_blank">Instagram</a></li>
-            <li><a href="mailto:deine@email.de">E-Mail</a></li>
+            <li><a href="https://twitter.com/dein-twitter" target="_blank" id="linkTwitter">Twitter</a></li>
+            <li><a href="https://www.instagram.com/dein-instagram" target="_blank" id="linkInstagram">Instagram</a></li>
+            <li><a href="mailto:deine@email.de" id="linkEmail">E-Mail</a></li>
         </ul>
     </div>
 </section>
@@ -158,7 +237,94 @@
 </footer>
 
 <script>
-    // Neon Text Wechsel
+    // --- Sprache ---
+    const translations = {
+        en: {
+            headerRole: "Programmer",
+            navAbout: "About me",
+            navProjects: "Projects",
+            navContact: "Links",
+            titleAbout: "About KartoffelSalat",
+            textAbout: "Hi, I'm KartoffelSalat. I love streaming and programming software. On my channel, I share exciting content about gaming, coding, and tech.",
+            titleProjects: "My Projects",
+            linkGitHub: "GitHub Projects",
+            linkTwitch: "My Twitch Channel",
+            linkYouTube: "YouTube Videos",
+            titleContact: "Contact & Links",
+            linkTwitter: "Twitter",
+            linkInstagram: "Instagram",
+            linkEmail: "Email"
+        },
+        de: {
+            headerRole: "Programmierer",
+            navAbout: "Über mich",
+            navProjects: "Projekte",
+            navContact: "Links",
+            titleAbout: "Über KartoffelSalat",
+            textAbout: "Hi, ich bin KartoffelSalat. Ich liebe es zu streamen und Software zu programmieren. Auf meinem Kanal teile ich spannende Inhalte zu Gaming, Coding und Tech.",
+            titleProjects: "Meine Projekte",
+            linkGitHub: "GitHub Projekte",
+            linkTwitch: "Mein Twitch Kanal",
+            linkYouTube: "YouTube Videos",
+            titleContact: "Kontakt & Links",
+            linkTwitter: "Twitter",
+            linkInstagram: "Instagram",
+            linkEmail: "E-Mail"
+        },
+        fr: {
+            headerRole: "Programmeur",
+            navAbout: "À propos",
+            navProjects: "Projets",
+            navContact: "Liens",
+            titleAbout: "À propos de KartoffelSalat",
+            textAbout: "Salut, je suis KartoffelSalat. J'aime streamer et programmer. Sur ma chaîne, je partage du contenu passionnant sur le gaming, le codage et la tech.",
+            titleProjects: "Mes Projets",
+            linkGitHub: "Projets GitHub",
+            linkTwitch: "Ma chaîne Twitch",
+            linkYouTube: "Vidéos YouTube",
+            titleContact: "Contact & Liens",
+            linkTwitter: "Twitter",
+            linkInstagram: "Instagram",
+            linkEmail: "E-mail"
+        }
+    };
+
+    function applyLanguage(lang) {
+        const t = translations[lang];
+        document.getElementById("headerRole").textContent = t.headerRole;
+        document.getElementById("navAbout").textContent = t.navAbout;
+        document.getElementById("navProjects").textContent = t.navProjects;
+        document.getElementById("navContact").textContent = t.navContact;
+        document.getElementById("titleAbout").textContent = t.titleAbout;
+        document.getElementById("textAbout").textContent = t.textAbout;
+        document.getElementById("titleProjects").textContent = t.titleProjects;
+        document.getElementById("linkGitHub").textContent = t.linkGitHub;
+        document.getElementById("linkTwitch").textContent = t.linkTwitch;
+        document.getElementById("linkYouTube").textContent = t.linkYouTube;
+        document.getElementById("titleContact").textContent = t.titleContact;
+        document.getElementById("linkTwitter").textContent = t.linkTwitter;
+        document.getElementById("linkInstagram").textContent = t.linkInstagram;
+        document.getElementById("linkEmail").textContent = t.linkEmail;
+    }
+
+    function setLanguage(lang) {
+        localStorage.setItem('userLang', lang);
+        applyLanguage(lang);
+        langPopup.style.display = 'none';
+    }
+
+    const langPopup = document.getElementById('langPopup');
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('userLang');
+        if(!savedLang) {
+            langPopup.style.display = 'block';
+        } else {
+            applyLanguage(savedLang);
+        }
+    });
+
+    // --- Neon Text Wechsel ---
     const texts = document.querySelectorAll('.neon-text-container span');
     let currentText = 0;
     setInterval(() => {
@@ -167,7 +333,7 @@
         texts[currentText].classList.add('active');
     }, 3000);
 
-    // Stufiges Auto-Scroll
+    // --- Stufiges Auto-Scroll ---
     const sections = document.querySelectorAll('section, header');
     let currentIndex = 0;
     let scrolling = false;
@@ -198,3 +364,4 @@
 
 </body>
 </html>
+
